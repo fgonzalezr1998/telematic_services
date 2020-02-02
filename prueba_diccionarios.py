@@ -60,13 +60,45 @@ class MyDict():
 
         return self.map_table_
 
-    def print_dic(self):
+    def muestra_alfabetico(self):
         sorted_list = sorted(self.map_table_.items())
         for i in sorted_list:
             if(isinstance(i[1], list)):
-                print str(i[0]) + ": " + ", ".join(i[1])
+                print str(i[0]) + ":\n"
+                for j in i[1]:
+                    print "\t" + str(j) + "\n"
             else:
-                print str(i[0]) + ": " + str(i[1])
+                print str(i[0]) + ":\n" + "\t" + str(i[1])
+
+    def muestra_por_longitud(self):
+        #PODRIA HACER ESTO MEJOR??
+        dic_aux = {}
+        dic_aux = self.get_dic()
+        keys_list = []
+
+        for k, v in dic_aux.items():
+            if(isinstance(v, list)):
+                list_aux = [k]
+                pos = 0
+                for i in keys_list:
+                    v2 = dic_aux[i]
+                    if(isinstance(v2, list) and 2 != k):
+                        if(len(v2) >= len(v)):
+                            pos = pos + 1
+                keys_list = keys_list[0 : pos] + list_aux + keys_list[pos:]
+            else:
+                keys_list.append(k)
+
+        #print
+        for i in keys_list:
+            print i + ":\n"
+            v = self.map_table_[i]
+            if(isinstance(v, list)):
+                for j in v:
+                    print "\t" + j + "\n"
+            else:
+                print "\t" + v + "\n"
+
 
     def delete_key_(self, key):
         try:
@@ -76,7 +108,7 @@ class MyDict():
 
 if __name__ == "__main__":
 
-    #creo la lista
+    #creo el diccionario inicial
     dic = MyDict({'valencia': ['unacosa', 'otracosa'], 'Francia': 'cerveza', 'Espana': ['vino', 'Tortilla de patata', 'Jamon']}) #Defino el objeto dic de la clase MyDict
 
     print(dic.get_dic())
@@ -104,4 +136,6 @@ if __name__ == "__main__":
     print(dic.get_dic())
     print("-------------")
 
-    dic.print_dic()
+    dic.muestra_alfabetico()
+    print("-------------")
+    dic.muestra_por_longitud()
