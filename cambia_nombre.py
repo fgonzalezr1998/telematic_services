@@ -37,14 +37,16 @@ class FolderChanger():
             self.threads_list_.append(th)
 
     def change_names_(self, path):
-        '''
-        recursive algorithm
-        '''
+
         self.lock.acquire()
         list_dir = os.listdir(path)
-        print(list_dir)
-        print("\n--------------------\n")
         self.lock.release()
+
+        for i in list_dir:
+            if(thereis_spaces(i)):
+                self.change_spaces(path, i)
+            if(thereis_upper(i)):
+                self.lower(path, i)
 
 def folders_ok(folders_list):
     for i in folders_list:
