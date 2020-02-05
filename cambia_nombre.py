@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+# -*- coding: utf-8 -*-
+
 import os
 import sys
 import threading
@@ -43,10 +45,37 @@ class FolderChanger():
         self.lock.release()
 
         for i in list_dir:
-            if(thereis_spaces(i)):
-                self.change_spaces(path, i)
-            if(thereis_upper(i)):
-                self.lower(path, i)
+            p = path + "/" + i #Complete the path
+
+            #replace spaces:
+            name = i.replace(" ", "_")
+            #lower chars:
+            name = name.lower()
+            #replace strange characters
+            name = self.replace_strange_chars_(name, ".")
+            p_new = path + "/" + name
+            #Only rename if file name changed
+            if(name != i):
+                self.lock.acquire()
+                os.rename(p, p_new)
+                self.lock.release()
+
+    def thereis_spaces_(self, file_name):
+
+        return file_name.find(" ") != -1
+
+    def replace_strange_chars_(self, file_name, char2replace):
+        n = file_name
+        for i in file_name:
+            if(self.is_strange_char_(i) and i != '_' and i != '.'):
+                n = n.replace(i, char2replace)
+
+        return n
+
+    def is_strange_char_(self, c):
+        pos = ord(c) #position in ascii table of character 'i'
+        return (pos < ord('A') or pos > ord('z')) and (pos < ord('0') or pos > ord('9'))
+
 
 def folders_ok(folders_list):
     for i in folders_list:
