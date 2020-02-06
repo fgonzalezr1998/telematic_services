@@ -7,9 +7,13 @@ class Redondea():
 
     def redondea_nota(self, nota, modo):
 
+        '''
+        return -1 if modo is not allowed
+        '''
+
         if(not self.mode_ok_(modo)):
             print("Modo Incorrecto")
-            return
+            return -1
 
         if(modo == self.mode_types[0]):
             return nota

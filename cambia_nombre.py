@@ -74,7 +74,8 @@ class FolderChanger():
 
     def is_strange_char_(self, c):
         pos = ord(c) #position in ascii table of character 'i'
-        return (pos < ord('A') or pos > ord('z')) and (pos < ord('0') or pos > ord('9'))
+        return (pos < ord('A') or pos > ord('z')) and
+                        (pos < ord('0') or pos > ord('9'))
 
 
 def folders_ok(folders_list):
