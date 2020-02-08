@@ -106,6 +106,9 @@ if __name__ == "__main__":
     add_parser_options(parser)
     (options, args) = parser.parse_args()
 
+    if(len(args) < MinArgs):
+        sys.exit("You must specify at least one folder")
+
     #Create one thread for each folder
     fc = FolderChanger(options, args)
 
