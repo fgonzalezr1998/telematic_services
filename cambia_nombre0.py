@@ -5,15 +5,13 @@
 import os
 import sys
 import threading
-import optparse
 
 #Consts:
 MinArgs = 1
 
 class FolderChanger():
-    def __init__(self, options, folders_list):
+    def __init__(self, folders_list):
 
-        self.opts_ = options
         self.folders_list_ = folders_list
         self.threads_list_ = []
 
@@ -75,7 +73,7 @@ class FolderChanger():
         return n
 
     def is_strange_char_(self, c):
-        pos = ord(c) #position in ascii table of character 'c'
+        pos = ord(c) #position in ascii table of character 'i'
         return (pos < ord('A') or pos > ord('z')) and \
                         (pos < ord('0') or pos > ord('9'))
 
@@ -92,21 +90,13 @@ def args_ok():
 
     return folders_ok(sys.argv[1:])
 
-def add_parser_options(parser):
-
-    options_list = ["-r", "--recursive", "-s", "--spaces",
-                    "-c", "--case", "-n", "--enne", "-t", "--accent", "-w", "--weird"]
-    for i in range(0, len(options_list), 2):
-        parser.add_option(options_list[i], options_list[i + 1], action="store_true")
 
 if __name__ == "__main__":
 
-    parser = optparse.OptionParser("Usage: %prog [options] folder [folder1, folder2,...foldern]")
-
-    add_parser_options(parser)
-    (options, args) = parser.parse_args()
+    if(not args_ok()):
+        sys.exit("Usage Error\n")
 
     #Create one thread for each folder
-    fc = FolderChanger(options, args)
+    fc = FolderChanger(sys.argv[1:])
 
-    #fc.change_names()
+    fc.change_names()
