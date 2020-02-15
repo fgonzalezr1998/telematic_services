@@ -42,25 +42,71 @@ class FolderChanger():
 
     def change_names_(self, path):
 
+        if(self.opts_.recursive):
+            print("Ejecuto recursivo")
+            self.change_names_recursive(path)
+        else:
+            print("Ejecuto No rcursivo")
+            self.change_names_no_recursive(path)
+
+    def change_names_recursive(self, path):
+
+        self.lock.acquire()
+        list_dir = os.listdir(path)
+        self.lock.release()
+
+        for (root,dirs,files) in os.walk(list_dir, topdown=true):
+            for i in list_dir:
+                self.replace(path, i)
+
+    def change_names_no_recursive(self, path):
+
         self.lock.acquire()
         list_dir = os.listdir(path)
         self.lock.release()
 
         for i in list_dir:
-            p = path + "/" + i #Complete the path
+            self.replace(path, i)
 
+    def replace(self, path, elem_name):
+        '''
+        param elem_name: name of file or folder to rename
+        '''
+
+        p = path + "/" + elem_name #Complete the path
+        name = elem_name
+        if(self.opts_received()):
             #replace spaces:
-            name = i.replace(" ", "_")
+            if(self.opts_.spaces):
+                name = name.replace(" ", "_")
+
             #lower chars:
-            name = name.lower()
+            if(self.opts_.case):
+                name = name.lower()
+
             #replace strange characters
+            if(self.opts_.weird):
+                name = self.replace_strange_chars_(name, ".")
+        else:
+            name = elem_name.replace(" ", "_")
+            name = name.lower()
             name = self.replace_strange_chars_(name, ".")
+
+        #Only rename if file name changed
+        if(name != elem_name):
             p_new = path + "/" + name
-            #Only rename if file name changed
-            if(name != i):
-                self.lock.acquire()
-                os.rename(p, p_new)
-                self.lock.release()
+            self.lock.acquire()
+            os.rename(p, p_new)
+            self.lock.release()
+
+
+    def opts_received(self):
+        finish = False
+        for i in self.opts_.__dict__:
+            if(self.opts_.__dict__[i] != None):
+                finish = True
+                break
+        return finish
 
     def thereis_spaces_(self, file_name):
 
@@ -106,10 +152,10 @@ if __name__ == "__main__":
     add_parser_options(parser)
     (options, args) = parser.parse_args()
 
-    if(len(args) < MinArgs):
-        sys.exit("You must specify at least one folder")
-
     #Create one thread for each folder
+    if(len(args) == 0):
+        args = ['.']
+
     fc = FolderChanger(options, args)
 
-    #fc.change_names()
+    fc.change_names()

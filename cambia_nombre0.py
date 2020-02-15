@@ -97,6 +97,9 @@ if __name__ == "__main__":
         sys.exit("Usage Error\n")
 
     #Create one thread for each folder
-    fc = FolderChanger(sys.argv[1:])
+    if(len(sys.argv) == MinArgs):
+        fc = FolderChanger(["."])
+    else:
+        fc = FolderChanger(sys.argv[1:])
 
     fc.change_names()
