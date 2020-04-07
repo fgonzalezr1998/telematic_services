@@ -36,7 +36,6 @@ CREATE TABLE IF NOT EXISTS `Clientes` (
 	`Direccion`	TEXT NOT NULL,
 	PRIMARY KEY(`DNI`)
 );
-
 CREATE TABLE IF NOT EXISTS `Automoviles` (
 	`ID`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`Marca`	TEXT NOT NULL,
@@ -44,8 +43,4 @@ CREATE TABLE IF NOT EXISTS `Automoviles` (
 	`Matricula`	TEXT NOT NULL,
 	`DNI_Dueno`	TEXT NOT NULL
 );
-
-INSERT INTO `Clientes` VALUES ('48205347S','Fernando','Gonzalez','Ramos','610428122','c/polvoranca');
-INSERT INTO `Clientes` VALUES ('48627981F','Paco','Perez','Abellan','230538117','c/mishuevos');
-
 COMMIT;
