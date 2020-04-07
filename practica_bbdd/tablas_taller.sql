@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `Facturas` (
 	`Num_Puertas`	INTEGER,
 	`Num_Ruedas`	INTEGER,
 	`Num_Motores`	INTEGER,
+	`Cobrada`	INTEGER NOT NULL,
 	`ID_Trabajo`	INTEGER NOT NULL UNIQUE
 );
 CREATE TABLE IF NOT EXISTS `Empleados` (
