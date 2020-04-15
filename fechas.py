@@ -4,11 +4,13 @@ import pytz
 import sys
 import optparse
 import datetime
+import time
 
 #CONSTS
 TimestampFields = 2
 FullDateFields = 4
 AllowedCities = ["Madrid", "Londres", "Moscu", "Tokio", "New_York", "UTC"]
+LocalHoursAllowed = ["madrid", "londres", "moscu", "tokio", "new_York"]
 
 def is_integer(str):
 
@@ -106,7 +108,62 @@ def full_date2utc(line):
 
     return ' '.join(l)
 
+def full_date2ts(line):
+    l = line.replace(',', "")
+    t_arr = l.split(' ')
+    l = t_arr[FullDateFields - 3:FullDateFields - 1]
+
+    dt = datetime.datetime.strptime(' '.join(l), "%Y-%m-%d %H:%M:%S")
+    #fmt = "%Y-%m-%d %H:%M:%S %Z%z"
+    l[0] = t_arr[0]
+    l[1] = str(int(time.mktime(dt.timetuple())))
+
+    return ' '.join(l)
+
+def timezone_loc(city):
+    if(city == LocalHoursAllowed[0]):
+        tl = pytz.timezone("Europe/Madrid")
+    if(city == LocalHoursAllowed[1]):
+        tl = pytz.timezone("Europe/London")
+    if(city == LocalHoursAllowed[2]):
+        tl = pytz.timezone("Europe/Moscow")
+    if(city == LocalHoursAllowed[3]):
+        tl = pytz.timezone("Asia/Tokyo")
+    if(city == LocalHoursAllowed[4]):
+        tl = pytz.timezone("America/New_York")
+
+    return tl
+
+def ts2localhour(line, city):
+    t_loc = timezone_loc(city)
+
+    t_arr = line.split(' ')
+    dt = datetime.datetime.utcfromtimestamp(float(t_arr[TimestampFields - 1]))
+
+    fmt = "%Y-%m-%d %H:%M:%S %Z%z"
+    t_arr[TimestampFields - 1] = t_loc.localize(dt)
+    t_arr[TimestampFields - 1] = t_arr[TimestampFields - 1].strftime(fmt)
+
+    return ' '.join(t_arr)
+
+def full_date2local_hour(line, city):
+    t_loc = timezone_loc(city)
+
+    l = line.replace(',', "")
+    t_arr = l.split(' ')
+    l = t_arr[FullDateFields - 3:FullDateFields - 1]
+
+    dt = datetime.datetime.strptime(' '.join(l), "%Y-%m-%d %H:%M:%S")
+    fmt = "%Y-%m-%d %H:%M:%S %Z%z"
+    l[0] = t_arr[0]
+    l[1] = t_loc.localize(dt)
+    l[1] = l[1].strftime(fmt)
+
+    return ' '.join(l)
+
 def print_times(file, options, args):
+    if(not options.timezone):
+        return
     eof = False
     while(not eof):
         line = file.readline()
@@ -114,13 +171,25 @@ def print_times(file, options, args):
         if(eof):
             continue
 
-        if(len(args) == 0 or options.timezone == "utc"):
+        if(len(args) == 0 or args[0] == "utc"):
             if(is_timestamp(line)):
                 print(ts2utc(line))
             if(is_full_date(line)):
                 print(full_date2utc(line))
+            continue
 
+        if(args[0] == "epoch"):
+            if(is_timestamp(line)):
+                print(line[0:len(line) - 1])
+            if(is_full_date(line)):
+                print(full_date2ts(line))
+            continue
 
+        if(args[0] in LocalHoursAllowed):
+            if(is_timestamp(line)):
+                print(ts2localhour(line, args[0]))
+            if(is_full_date(line)):
+                print(full_date2local_hour(line, args[0]))
 
 if __name__ == "__main__":
 
