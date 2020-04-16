@@ -88,18 +88,16 @@ def add_parser_options(parser):
         parser.add_option(options_list[i], options_list[i + 1], action="store_true")
 
 def ts2utc(line):
+    utc = pytz.utc
     t_arr = line.split(' ')
     dt = datetime.datetime.utcfromtimestamp(float(t_arr[TimestampFields - 1]))
-
+    dt = utc.localize(dt)
     fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     t_arr[TimestampFields - 1] = dt.strftime(fmt)
 
     return ' '.join(t_arr)
 
 def full_date2utc(line):
-    '''
-    ¡¡Usar pytz!!
-    '''
     utc = pytz.utc
     l = line.replace(',', "")
     t_arr = l.split(' ')
