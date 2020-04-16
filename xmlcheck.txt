@@ -1,0 +1,23 @@
+#!/usr/bin/python -tt
+# -*- coding: utf-8 -*-
+import sys,argparse
+import xml.etree.cElementTree as ET
+
+def parse_file(filename):
+    """Parsers a xml file. If not well formed, raises an exception."""
+    ET.ElementTree(file=filename).getroot()
+    return True
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="xml file to check")
+   
+    argumentos = parser.parse_args()
+    file=argumentos.file
+    if parse_file(file):
+        print file+" is a well-formed xml document"
+
+if __name__ == "__main__":
+    main()
+
+
