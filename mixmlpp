@@ -1,0 +1,73 @@
+#! /usr/bin/env python
+
+import xmlpp
+import sys
+
+#CONSTS:
+MinArgs = 2
+MaxArgs = 5
+
+class Params():
+
+    def __init__(self):
+        self.filename_in = None
+        self.filename_out = sys.stdout
+        self.indent = 4
+        self.nlines = 80
+
+    def set_filename_in(self, fname):
+        self.filename_in = fname
+
+    def set_filename_out(self, fname):
+        self.filename_out = fname
+
+    def set_indent(self, indent):
+        self.indent = indent
+
+    def set_nlines(self, lines):
+        self.nlines = lines
+
+    def get_filename_in(self):
+        return self.filename_in
+
+    def get_filename_out(self):
+        return self.filename_out
+
+    def get_indent(self):
+        return self.indent
+
+    def get_nlines(self):
+        return self.nlines
+
+if __name__ == "__main__":
+
+    if(len(sys.argv) < MinArgs or len(sys.argv) > MaxArgs):
+        sys.exit("Usage Error")
+
+    params = Params()
+    i = 1
+    while(i < len(sys.argv)):
+        print(sys.argv[i])
+        if(i == MinArgs - 1):
+            params.set_filename_in(sys.argv[i])
+        if(i == MinArgs):
+            params.set_filename_out(sys.argv[i])
+        if(i == MaxArgs - 2):
+            params.set_indent(sys.argv[i])
+        if(i == MaxArgs - 1):
+            params.set_nlines(sys.argv[i])
+
+        i = i + 1
+
+    if(not params.ok()):
+        sys.exit("Params Incorrect!")
+
+    file = open(params.get_filename_in(), "r")
+    if(file == None):
+        sys.exit("Error Openning File")
+
+    xmlpp.pprint(file.read(), output=params.get_filename_out(),
+                    indent=params.get_indent(), width=params.get_nlines())
+
+
+    file.close()
