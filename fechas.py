@@ -97,11 +97,16 @@ def ts2utc(line):
     return ' '.join(t_arr)
 
 def full_date2utc(line):
+    '''
+    ¡¡Usar pytz!!
+    '''
+    utc = pytz.utc
     l = line.replace(',', "")
     t_arr = l.split(' ')
     l = t_arr[FullDateFields - 3:FullDateFields - 1]
 
     dt = datetime.datetime.strptime(' '.join(l), "%Y-%m-%d %H:%M:%S")
+    dt = utc.localize(dt)
     fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     l[0] = t_arr[0]
     l[1] = dt.strftime(fmt)
@@ -212,16 +217,6 @@ if __name__ == "__main__":
     #print(args)
     file = open("fechas.txt", "r")
     print_times(file, options, args)
-
-    '''
-    eof = False
-    while(not eof):
-        line = file.readline()
-        eof = line == ''
-        if(not eof):
-            print(line)
-        i = i + 1
-    '''
 
     file.close()
     exit(0)
