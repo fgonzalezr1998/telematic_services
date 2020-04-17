@@ -2,30 +2,47 @@
 
 import xmlpp
 import sys
+import os
+import optparse
 
 #CONSTS:
 MinArgs = 2
-MaxArgs = 5
+MaxArgs = 6
+OptionsList = ["-m", "--modify"]
+FOutTemp = "mixmlpp_temp.tmp"
 
 class Params():
 
-    def __init__(self):
+    def __init__(self, debug=False):
         self.filename_in = None
         self.filename_out = sys.stdout
         self.indent = 4
         self.nlines = 80
+        self.debug = debug
 
-    def set_filename_in(self, fname):
-        self.filename_in = fname
+    #PUBLIC METHODS
 
-    def set_filename_out(self, fname):
-        self.filename_out = fname
+    def set_params(self, params_list, options):
+        if(len(params_list) == 0):
+            sys.exit("Usage Error")
+        i = 0
+        while(i < len(params_list)):
+            if(i == MinArgs - 2):
+                params.set_filename_in_(params_list[i])
+            if(i == MinArgs - 1):
+                if(options.modify != None and options.modify):
+                    params.set_indent_(params_list[i])
+                else:
+                    params.set_filename_out_(params_list[i])
+            if(i == MinArgs):
+                if(options.modify != None and options.modify):
+                    params.set_nlines_(params_list[i])
+                else:
+                    params.set_indent_(params_list[i])
+            if(i == MaxArgs + 1):
+                params.set_nlines_(params_list[i])
 
-    def set_indent(self, indent):
-        self.indent = indent
-
-    def set_nlines(self, lines):
-        self.nlines = lines
+            i = i + 1
 
     def get_filename_in(self):
         return self.filename_in
@@ -34,40 +51,123 @@ class Params():
         return self.filename_out
 
     def get_indent(self):
-        return self.indent
+        return int(self.indent)
 
     def get_nlines(self):
-        return self.nlines
+        return int(self.nlines)
+
+    def is_ok(self):
+        return self.filename_in_isok_() and self.filename_out_isok_() and \
+                self.indent_isok_() and self.nlines_isok_()
+
+    #PRIVATE METHODS
+
+    def set_filename_in_(self, fname):
+        self.filename_in = fname
+
+    def set_filename_out_(self, fname):
+        self.filename_out = fname
+
+    def set_indent_(self, indent):
+        self.indent = indent
+
+    def set_nlines_(self, lines):
+        self.nlines = lines
+
+    def filename_in_isok_(self):
+        if(os.path.isfile(self.filename_in)):
+            return True
+        if(self.debug):
+            print("[Params ERROR] Invalid Input Filename!")
+
+    def filename_out_isok_(self):
+        if(self.filename_out == sys.stdout or os.path.isfile(self.filename_out)):
+            return True
+        if(self.debug):
+            print("[Params ERROR] Invalid Output Filename!")
+
+    def indent_isok_(self):
+        n = None
+        try:
+            n = int(self.indent)
+        except ValueError:
+            if(self.debug):
+                print("[Params ERROR] Invalid Indent!")
+
+        return n != None
+
+    def nlines_isok_(self):
+        n = None
+        try:
+            n = int(self.nlines)
+        except ValueError:
+            if(self.debug):
+                print("[Params ERROR] Invalid Number of Lines!")
+
+        return n != None
+
+def add_parser_options(parser):
+
+    for i in range(0, len(OptionsList), 2):
+        parser.add_option(OptionsList[i], OptionsList[i + 1], action="store_true")
+
+def open_files(params, options):
+    f_in = open(params.get_filename_in(), "r")
+    if(options.modify == None):
+        f_out = params.get_filename_out()
+    else:
+        if(options.modify == True):
+            f_out = FOutTemp
+
+
+    if(f_out != sys.stdout):
+        f_out = open(f_out, "w")
+
+    return f_in, f_out
+
+def clean_files(file_in, file_out, fname_in):
+    #Close files
+    file_in.close()
+    file_out.close()
+    #Open files in correct mode and copy content
+    with open(FOutTemp, "r") as f_in:
+        with open(fname_in, "w") as f_out:
+            for line in f_in:
+                f_out.write(line)
+            f_in.close()
+            f_out.close()
+
+    #Remove temporal file
+    os.remove(FOutTemp)
+
 
 if __name__ == "__main__":
 
     if(len(sys.argv) < MinArgs or len(sys.argv) > MaxArgs):
         sys.exit("Usage Error")
 
-    params = Params()
-    i = 1
-    while(i < len(sys.argv)):
-        print(sys.argv[i])
-        if(i == MinArgs - 1):
-            params.set_filename_in(sys.argv[i])
-        if(i == MinArgs):
-            params.set_filename_out(sys.argv[i])
-        if(i == MaxArgs - 2):
-            params.set_indent(sys.argv[i])
-        if(i == MaxArgs - 1):
-            params.set_nlines(sys.argv[i])
+    #Set params
+    parser = optparse.OptionParser("Usage: %prog [options] arg")
+    add_parser_options(parser)
 
-        i = i + 1
+    (options, args) = parser.parse_args()
 
-    if(not params.ok()):
-        sys.exit("Params Incorrect!")
+    params = Params(debug=True)
+    params.set_params(args, options)
 
-    file = open(params.get_filename_in(), "r")
-    if(file == None):
+    if(not params.is_ok()):
+        sys.exit()
+
+    file_in, file_out = open_files(params, options)
+    if(file_in == None or file_out == None):
         sys.exit("Error Openning File")
 
-    xmlpp.pprint(file.read(), output=params.get_filename_out(),
+    xmlpp.pprint(file_in.read(), output=file_out,
                     indent=params.get_indent(), width=params.get_nlines())
 
-
-    file.close()
+    if(options.modify != None and options.modify):
+        clean_files(file_in, file_out, params.get_filename_in())
+    else:
+        file_in.close()
+        file_out.close()
+    exit(0)

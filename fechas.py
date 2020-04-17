@@ -210,9 +210,7 @@ if __name__ == "__main__":
     add_parser_options(parser)
 
     (options, args) = parser.parse_args()
-
-    #print(options.timezone)
-    #print(args)
+    
     file = open("fechas.txt", "r")
     print_times(file, options, args)
 
