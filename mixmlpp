@@ -24,7 +24,7 @@ class Params():
 
     def set_params(self, params_list, options):
         if(len(params_list) == 0):
-            sys.exit("Usage Error")
+            self.filename_in = sys.stdin
         i = 0
         while(i < len(params_list)):
             if(i == MinArgs - 2):
@@ -75,7 +75,7 @@ class Params():
         self.nlines = lines
 
     def filename_in_isok_(self):
-        if(os.path.isfile(self.filename_in)):
+        if(self.filename_in == sys.stdin or os.path.isfile(self.filename_in)):
             return True
         if(self.debug):
             print("[Params ERROR] Invalid Input Filename!")
@@ -112,11 +112,15 @@ def add_parser_options(parser):
         parser.add_option(OptionsList[i], OptionsList[i + 1], action="store_true")
 
 def open_files(params, options):
-    f_in = open(params.get_filename_in(), "r")
+
+    f_in = params.get_filename_in()
+    if(f_in != sys.stdin):
+        f_in = open(f_out, "r")
+
     if(options.modify == None):
         f_out = params.get_filename_out()
     else:
-        if(options.modify == True):
+        if(options.modify):
             f_out = FOutTemp
 
 
@@ -143,7 +147,7 @@ def clean_files(file_in, file_out, fname_in):
 
 if __name__ == "__main__":
 
-    if(len(sys.argv) < MinArgs or len(sys.argv) > MaxArgs):
+    if(len(sys.argv) != 1 and (len(sys.argv) < MinArgs or len(sys.argv) > MaxArgs)):
         sys.exit("Usage Error")
 
     #Set params
