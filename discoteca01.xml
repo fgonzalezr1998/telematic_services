@@ -16,97 +16,93 @@
 				2011
 			</fecha>
 
-			<canciones>
+			<cd1>
+				<duracion>
+					45min
+				</duracion>
+				<canciones>
+					<cancion>
+						Bella Sin alma
+					</cancion>
+					<cancion>
+						Yo Caminare
+					</cancion>
+					<cancion>
+						Tu
+					</cancion>
+					<cancion>
+						El Jardin Prohibido
+					</cancion>
+					<cancion>
+						Sabado Por La Tarde
+					</cancion>
+					<cancion>
+						Soy Un Italiano
+					</cancion>
+					<cancion>
+						De Amor Ya No Se Muere
+					</cancion>
+					<cancion>
+						Corazon Gitano
+					</cancion>
+					<cancion>
+						Mi Libre Cancion
+					</cancion>
+					<cancion>
+						Por Elisa
+					</cancion>
+					<cancion>
+						Pequeno Gran Amor
+					</cancion>
+					<cancion>
+						Ancora Tu
+					</cancion>
+				</canciones>
+			</cd1>
 
-				<cd1>
-					<duracion>
-						45min
-					</duracion>
-					<canciones>
-						<cancion>
-							Bella Sin alma
-						</cancion>
-						<cancion>
-							Yo Caminare
-						</cancion>
-						<cancion>
-							Tu
-						</cancion>
-						<cancion>
-							El Jardin Prohibido
-						</cancion>
-						<cancion>
-							Sabado Por La Tarde
-						</cancion>
-						<cancion>
-							Soy Un Italiano
-						</cancion>
-						<cancion>
-							De Amor Ya No Se Muere
-						</cancion>
-						<cancion>
-							Corazon Gitano
-						</cancion>
-						<cancion>
-							Mi Libre Cancion
-						</cancion>
-						<cancion>
-							Por Elisa
-						</cancion>
-						<cancion>
-							Pequeno Gran Amor
-						</cancion>
-						<cancion>
-							Ancora Tu
-						</cancion>
-					</canciones>
-				</cd1>
-
-				<cd2>
-					<duracion>
-						47min
-					</duracion>
-					<canciones>
-						<cancion>
-							Senza Una Donna
-						</cancion>
-						<cancion>
-							El Mundo
-						</cancion>
-						<cancion>
-							La Cosa Mas Bella
-						</cancion>
-						<cancion>
-							Te Amo
-						</cancion>
-						<cancion>
-							Yo No Te Pido La Luna
-						</cancion>
-						<cancion>
-							La Fuerza De La Vida
-						</cancion>
-						<cancion>
-							La Bambola
-						</cancion>
-						<cancion>
-							Gloria
-						</cancion>
-						<cancion>
-							Te Enamoraras
-						</cancion>
-						<cancion>
-							Poco A Poco Me Enamore De Ti
-						</cancion>
-						<cancion>
-							Margarita
-						</cancion>
-						<cancion>
-							Tornero
-						</cancion>
-					</canciones>
-				</cd2>
-
-			</canciones>
+			<cd2>
+				<duracion>
+					47min
+				</duracion>
+				<canciones>
+					<cancion>
+						Senza Una Donna
+					</cancion>
+					<cancion>
+						El Mundo
+					</cancion>
+					<cancion>
+						La Cosa Mas Bella
+					</cancion>
+					<cancion>
+						Te Amo
+					</cancion>
+					<cancion>
+						Yo No Te Pido La Luna
+					</cancion>
+					<cancion>
+						La Fuerza De La Vida
+					</cancion>
+					<cancion>
+						La Bambola
+					</cancion>
+					<cancion>
+						Gloria
+					</cancion>
+					<cancion>
+						Te Enamoraras
+					</cancion>
+					<cancion>
+						Poco A Poco Me Enamore De Ti
+					</cancion>
+					<cancion>
+						Margarita
+					</cancion>
+					<cancion>
+						Tornero
+					</cancion>
+				</canciones>
+			</cd2>
 
 		</disco>
 

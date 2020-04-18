@@ -1,0 +1,19 @@
+#!/usr/bin/python -tt
+# -*- coding: utf-8 -*-
+import sys,json
+
+def parse_file(file):
+    """Parsers a json file. If not well formed, raises an exception."""
+    text=sys.stdin.read()
+    json.loads(text)
+    return True
+
+def main():
+    file=sys.stdin
+    if parse_file(file):
+        print "Valid json"
+
+if __name__ == "__main__":
+    main()
+
+

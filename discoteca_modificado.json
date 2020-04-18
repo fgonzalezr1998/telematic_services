@@ -1,0 +1,47 @@
+{
+    "discos": [
+        {
+            "titulo": "Via Dalma", 
+            "fecha": "2011", 
+            "artista": "Sergio Dalma", 
+            "cd2": [
+                {
+                    "duracion": "47min", 
+                    "canciones": [
+                        "Senza Una Donna", 
+                        "El Mundo", 
+                        "La Cosa Mas Bella", 
+                        "Te Amo", 
+                        "Yo No Te Pido La Luna", 
+                        "La Fuerza De La Vida", 
+                        "La Bambola", 
+                        "Gloria", 
+                        "Te Enamoraras", 
+                        "Poco A Poco Me Enamore De Ti", 
+                        "Margarita", 
+                        "Tornero"
+                    ]
+                }
+            ], 
+            "cd1": [
+                {
+                    "duracion": "45min", 
+                    "canciones": [
+                        "Bella Sin Alma", 
+                        "Yo Caminare", 
+                        "Tu", 
+                        "El Jardin Prohibido", 
+                        "Sabado Por La Tarde", 
+                        "Soy Un Italiano", 
+                        "De Amor Ya No Se Muere", 
+                        "Corazon Gitano", 
+                        "Mi Libre Cancion", 
+                        "Por Elisa", 
+                        "Pequeno Gran Amor", 
+                        "Ancora Tu"
+                    ]
+                }
+            ]
+        }
+    ]
+}
