@@ -167,8 +167,9 @@ def full_date2local_hour(line, city):
     return l
 
 def flush(out):
-    json_f = open(JSonFile, "w")
-    if(json_f == None):
+    try:
+        json_f = open(JSonFile, "w")
+    except IOError:
         sys.exit("[ERROR] Problem openning Json file!")
 
     for i in out:
