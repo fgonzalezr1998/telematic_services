@@ -5,12 +5,14 @@ import sys
 import optparse
 import datetime
 import time
+import json
 
 #CONSTS
 TimestampFields = 2
 FullDateFields = 4
 AllowedCities = ["Madrid", "Londres", "Moscu", "Tokio", "New_York", "UTC"]
 LocalHoursAllowed = ["madrid", "londres", "moscu", "tokio", "new_York"]
+JSonFile = "fechas_json.json"
 
 def is_integer(str):
 
@@ -83,7 +85,7 @@ def file_ok(file):
 
 def add_parser_options(parser):
 
-    options_list = ["-t", "--timezone"]
+    options_list = ["-t", "--timezone", "-j", "--json"]
     for i in range(0, len(options_list), 2):
         parser.add_option(options_list[i], options_list[i + 1], action="store_true")
 
@@ -95,7 +97,7 @@ def ts2utc(line):
     fmt = "%Y-%m-%d %H:%M:%S %Z%z"
     t_arr[TimestampFields - 1] = dt.strftime(fmt)
 
-    return ' '.join(t_arr)
+    return t_arr
 
 def full_date2utc(line):
     utc = pytz.utc
@@ -109,7 +111,7 @@ def full_date2utc(line):
     l[0] = t_arr[0]
     l[1] = dt.strftime(fmt)
 
-    return ' '.join(l)
+    return l
 
 def full_date2ts(line):
     l = line.replace(',', "")
@@ -121,7 +123,7 @@ def full_date2ts(line):
     l[0] = t_arr[0]
     l[1] = str(int(time.mktime(dt.timetuple())))
 
-    return ' '.join(l)
+    return l
 
 def timezone_loc(city):
     if(city == LocalHoursAllowed[0]):
@@ -147,7 +149,7 @@ def ts2localhour(line, city):
     t_arr[TimestampFields - 1] = t_loc.localize(dt)
     t_arr[TimestampFields - 1] = t_arr[TimestampFields - 1].strftime(fmt)
 
-    return ' '.join(t_arr)
+    return t_arr
 
 def full_date2local_hour(line, city):
     t_loc = timezone_loc(city)
@@ -162,12 +164,74 @@ def full_date2local_hour(line, city):
     l[1] = t_loc.localize(dt)
     l[1] = l[1].strftime(fmt)
 
-    return ' '.join(l)
+    return l
+
+def flush(out):
+    json_f = open(JSonFile, "w")
+    if(json_f == None):
+        sys.exit("[ERROR] Problem openning Json file!")
+
+    for i in out:
+        json_f.write(json.dumps(i))
+        json_f.write("\n")
+
+    json_f.close()
+
+def print_in_ts(line, options, json_output):
+    if(is_timestamp(line)):
+        l = line[0:len(line) - 1]
+        if(options.json):
+            print(l)
+            out = {"line": l[0:l.find(' ')], "time": int(''.join(l[l.find(' ') + 1:]))}
+            json_output.append(out)
+        else:
+            print(l)
+
+    if(is_full_date(line)):
+        l = full_date2ts(line)
+        if(options.json):
+            out = {"line": l[0], "time": int(''.join(l[1:]))}
+            json_output.append(out)
+        else:
+            print(l)
+
+def print_in_utc(line, options, json_output):
+    if(is_timestamp(line)):
+        l = ts2utc(line)
+        if(options.json):
+            out = {"line": l[0], "time": ' '.join(l[1:])}
+            json_output.append(out)
+        else:
+            print(l)
+    if(is_full_date(line)):
+        l = full_date2utc(line)
+        if(options.json):
+            out = {"line": l[0], "time": ' '.join(l[1:])}
+            json_output.append(out)
+        else:
+            print(l)
+
+def print_in_lh(line, options, json_output, city):
+    if(is_timestamp(line)):
+        l = ts2localhour(line, city)
+        if(options.json):
+            out = {"line": l[0], "time": ' '.join(l[1:])}
+            json_output.append(out)
+        else:
+            print(l)
+    if(is_full_date(line)):
+        l = full_date2local_hour(line, city)
+        if(options.json):
+            out = {"line": l[0], "time": ' '.join(l[1:])}
+            json_output.append(out)
+        else:
+            print(l)
 
 def print_times(file, options, args):
-    if(not options.timezone):
+    if(not (options.timezone or options.json)):
         return
     eof = False
+    json_output = []
     while(not eof):
         line = file.readline()
         eof = line == ''
@@ -175,24 +239,18 @@ def print_times(file, options, args):
             continue
 
         if(len(args) == 0 or args[0] == "utc"):
-            if(is_timestamp(line)):
-                print(ts2utc(line))
-            if(is_full_date(line)):
-                print(full_date2utc(line))
+            print_in_utc(line, options, json_output)
             continue
 
-        if(args[0] == "epoch"):
-            if(is_timestamp(line)):
-                print(line[0:len(line) - 1])
-            if(is_full_date(line)):
-                print(full_date2ts(line))
+        if(options.timezone and args[0] == "epoch"):
+            print_in_ts(line, options, json_output)
             continue
 
-        if(args[0] in LocalHoursAllowed):
-            if(is_timestamp(line)):
-                print(ts2localhour(line, args[0]))
-            if(is_full_date(line)):
-                print(full_date2local_hour(line, args[0]))
+        if(options.timezone and args[0] in LocalHoursAllowed):
+            print_in_lh(line, options, json_output, args[0])
+
+    if(options.json):
+        flush(json_output)
 
 if __name__ == "__main__":
 
@@ -210,7 +268,9 @@ if __name__ == "__main__":
     add_parser_options(parser)
 
     (options, args) = parser.parse_args()
-    
+    print(options.json)
+    print(args)
+
     file = open("fechas.txt", "r")
     print_times(file, options, args)
 

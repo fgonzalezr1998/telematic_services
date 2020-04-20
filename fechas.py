@@ -181,14 +181,14 @@ def print_times(file, options, args):
                 print(full_date2utc(line))
             continue
 
-        if(args[0] == "epoch"):
+        if(options.timezone and args[0] == "epoch"):
             if(is_timestamp(line)):
                 print(line[0:len(line) - 1])
             if(is_full_date(line)):
                 print(full_date2ts(line))
             continue
 
-        if(args[0] in LocalHoursAllowed):
+        if(options.timezone and args[0] in LocalHoursAllowed):
             if(is_timestamp(line)):
                 print(ts2localhour(line, args[0]))
             if(is_full_date(line)):
@@ -210,7 +210,7 @@ if __name__ == "__main__":
     add_parser_options(parser)
 
     (options, args) = parser.parse_args()
-    
+
     file = open("fechas.txt", "r")
     print_times(file, options, args)
 
