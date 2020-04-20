@@ -24,7 +24,7 @@ SELECT Nombre, Apellido1, Apellido2, Empleados.DNI, Media_Horas, ID_Trabajo
 
   WHERE Empleados.DNI = Subconsulta.DNI
 
-
+*/
 -- 4.Consultar Dinero gastado por clientes
 
 SELECT (SELECT Precio_Ud * NV FROM Repuestos WHERE Nombre = "Ventanas"),
@@ -37,12 +37,12 @@ SELECT (SELECT Precio_Ud * NV FROM Repuestos WHERE Nombre = "Ventanas"),
         FROM Facturas
         GROUP BY DNI_Cliente
   )
-
+/*
 -- 5.Consultar las facturas pendientes
 SELECT *
   FROM Facturas
   WHERE Cobrada = 0
-*/
+
 
 -- 6.Consultar facturas pendientes por cliente
 
@@ -51,3 +51,4 @@ SELECT DNI_Cliente, Nombre, Apellido1, Apellido2, Cobrada
   --GROUP BY DNI_Cliente
   --HAVING DNI_Cliente = Clientes.DNI and Cobrada = 0
   WHERE DNI_Cliente = Clientes.DNI and Cobrada = 0
+*/
