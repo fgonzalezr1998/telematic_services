@@ -2,6 +2,7 @@
 
 import sqlite3
 import sys
+import os
 
 #CONSTS:
 MinMainMenuItem = 1
@@ -18,6 +19,8 @@ MaxCarMenu = 3
 
 class SQLExecutor():
     def __init__(self, bdd_path):
+        if(not os.path.isfile(bdd_path)):
+            sys.exit(1)
         self.conn_bd = sqlite3.connect(bdd_path)
         self.cursor = self.conn_bd.cursor()
 
@@ -47,6 +50,8 @@ class SQLExecutor():
             sys.exit("\n[ERROR] bad entry\n")
         except SyntaxError:
             sys.exit("\n[ERROR] bad entry\n")
+        except EOFError:
+            sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
         if(n_action < MinClientMenu or n_action > MaxClientMenu):
             sys.exit("\n[ERROR] bad entry\n")
 
@@ -62,6 +67,8 @@ class SQLExecutor():
             sys.exit("\n[ERROR] bad entry\n")
         except SyntaxError:
             sys.exit("\n[ERROR] bad entry\n")
+        except EOFError:
+            sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
         if(n_action < MinCarMenu or n_action > MaxCarMenu):
             sys.exit("\n[ERROR] bad entry\n")
 
@@ -77,6 +84,9 @@ class SQLExecutor():
             sys.exit("\n[ERROR] bad entry\n")
         except SyntaxError:
             sys.exit("\n[ERROR] bad entry\n")
+        except EOFError:
+            sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
+
         if(n_action < MinDataMenu or n_action > MaxDataMenu):
             sys.exit("\n[ERROR] bad entry\n")
 
@@ -92,7 +102,10 @@ class SQLExecutor():
             #self.cursor.execute(sql, (dni, n, a1, a2, tfno, dir)) #Execute query
 
         else:
-            dni = raw_input("DNI: ")
+            try:
+                dni = raw_input("DNI: ")
+            except EOFError:
+                sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
             sql = "SELECT DNI FROM Clientes WHERE DNI = ?"
             self.cursor.execute(sql, (dni,))
             rd = self.cursor.fetchall()
@@ -201,19 +214,26 @@ class SQLExecutor():
         #print(ret_data)
 
     def get_client_data_(self):
-        dni = raw_input("DNI: ")
-        n = raw_input("Nombre: ")
-        a1 = raw_input("Primer Apellido: ")
-        a2 = raw_input("Segundo Apellido: ")
-        tfno = raw_input("Telefono: ")
-        dir = raw_input("Direccion: ")
+        try:
+            dni = raw_input("DNI: ")
+            n = raw_input("Nombre: ")
+            a1 = raw_input("Primer Apellido: ")
+            a2 = raw_input("Segundo Apellido: ")
+            tfno = raw_input("Telefono: ")
+            dir = raw_input("Direccion: ")
+        except EOFError:
+            sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
         return dni, n, a1, a2, tfno, dir
 
     def get_car_data_(self):
-        mar = raw_input("Marca: ")
-        mod = raw_input("Modelo: ")
-        mat = raw_input("Matricula: ")
-        dni = raw_input("DNI Dueno: ")
+        try:
+            mar = raw_input("Marca: ")
+            mod = raw_input("Modelo: ")
+            mat = raw_input("Matricula: ")
+            dni = raw_input("DNI Dueno: ")
+        except EOFError:
+            sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
+
         return mar, mod, mat, dni
 
     def show_data_menu_(self):
