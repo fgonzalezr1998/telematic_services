@@ -2,6 +2,7 @@
 
 import json
 import flask
+from werkzeug.exceptions import BadRequestKeyError
 
 def response():
     return [
@@ -519,7 +520,11 @@ app = flask.Flask(__name__)
 def posts():
     request = flask.request.args
     if len(request) > 0:
-        id = request['userId']
+        try:
+            id = request['userId']
+        except BadRequestKeyError:
+            print("[ERROR] Requested resource doesn't exist!")
+            return "[ERROR] Requested resource doesn't exist!"
         respuesta = response_userId(id)
         return json.dumps(respuesta, True, 4)
     else:
