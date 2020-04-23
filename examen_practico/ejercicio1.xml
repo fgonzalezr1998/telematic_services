@@ -1,0 +1,97 @@
+<?xml version="1.1"?>
+
+<pedido>
+
+	<fecha>
+		20-03-2020
+	</fecha>
+	<envio>
+		<calle>
+			Plaza de la Duquesa 52 (Albacete)
+		</calle>
+		<codigo_postal>
+			05020
+		</codigo_postal>
+	</envio>
+	<facturacion>
+		<calle>
+			General Ricardos (Madrid)
+		</calle>
+		<codigo_postal>
+			28055
+		</codigo_postal>
+	</facturacion>
+	<cliente>
+		Miguel García
+	</cliente>
+	<receptor>
+		Antonia Sanz
+	</receptor>
+
+	<producto>
+
+		<codigo>
+			718347
+		<codigo>
+		<nombre>
+			Hazada de Puas
+		</nombre>
+		<modelo>
+			Acero de carbono
+		</modelo>
+		<precio>
+			<normal>
+				68,40
+			</normal>
+			<con_rebaja>
+				59,99
+			</con_rebaja>
+		</precio>
+
+	</producto>
+
+	<producto>
+
+		<codigo>
+			718344
+		<codigo>
+		<nombre>
+			Hazada de Plantas
+		</nombre>
+		<modelo>
+			Hoja estrecha pequena (una mano)
+		</modelo>
+		<precio>
+			<normal>
+				20,40
+			</normal>
+			<con_rebaja>
+				20,40
+			</con_rebaja>
+		</precio>
+
+	</producto>
+
+	<producto>
+
+		<codigo>
+			708360
+		<codigo>
+		<nombre>
+			Hoz
+		</nombre>
+		<modelo>
+			Dictum
+		</modelo>
+		<precio>
+			<normal>
+				109,00
+			</normal>
+			<con_rebaja>
+				109,00
+			</con_rebaja>
+		</precio>
+
+	</producto>
+
+</pedido>

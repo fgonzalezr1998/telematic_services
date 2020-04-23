@@ -8,7 +8,7 @@ class Coche():
         self.marca = None
         self.model = None
 
-def set_param(coches, coche, comm, line):
+def set_param(coche, comm, line):
     if(line == ""):
         return
 
@@ -45,7 +45,7 @@ def read_coche(coches, file):
         if(line.find("modelo") > 0):
             comm = "modelo"
             continue
-        set_param(coches, coche, comm, line)
+        set_param(coche, comm, line)
 
     coches.append(coche)
 
