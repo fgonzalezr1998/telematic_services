@@ -8,12 +8,7 @@ from werkzeug.exceptions import BadRequestKeyError
 
 #Consts:
 BBDDPath = "rest_sqlite.sqlite"
-'''
-if(not os.path.isfile(BBDDPath)):
-    sys.exit(1)
-conn_bd = sqlite3.connect(BBDDPath, check_same_thread=False)
-cursor = conn_bd.cursor()
-'''
+
 conn_bd = None
 cursor = None
 
@@ -124,3 +119,5 @@ if __name__ == '__main__':
     cursor = conn_bd.cursor()
 
     app.run(debug=True)
+
+    exit(0)

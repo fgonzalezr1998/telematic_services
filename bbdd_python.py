@@ -51,7 +51,7 @@ class SQLExecutor():
         except SyntaxError:
             sys.exit("\n[ERROR] bad entry\n")
         except EOFError:
-            sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
+            sys.exit("\nQUE HACES METIENDO EOF?\n")
         if(n_action < MinClientMenu or n_action > MaxClientMenu):
             sys.exit("\n[ERROR] bad entry\n")
 
@@ -68,7 +68,7 @@ class SQLExecutor():
         except SyntaxError:
             sys.exit("\n[ERROR] bad entry\n")
         except EOFError:
-            sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
+            sys.exit("\nQUE HACES METIENDO EOF?\n")
         if(n_action < MinCarMenu or n_action > MaxCarMenu):
             sys.exit("\n[ERROR] bad entry\n")
 
@@ -85,7 +85,7 @@ class SQLExecutor():
         except SyntaxError:
             sys.exit("\n[ERROR] bad entry\n")
         except EOFError:
-            sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
+            sys.exit("\nQUE HACES METIENDO EOF?\n")
 
         if(n_action < MinDataMenu or n_action > MaxDataMenu):
             sys.exit("\n[ERROR] bad entry\n")
@@ -105,7 +105,7 @@ class SQLExecutor():
             try:
                 dni = raw_input("DNI: ")
             except EOFError:
-                sys.exit("\nQUE HACES METIENDO EOF, CEPORRO?\n")
+                sys.exit("\nQUE HACES METIENDO EOF?\n")
             sql = "SELECT DNI FROM Clientes WHERE DNI = ?"
             self.cursor.execute(sql, (dni,))
             rd = self.cursor.fetchall()
